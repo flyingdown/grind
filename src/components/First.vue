@@ -2,7 +2,7 @@
     <div>
         <el-row>
             <el-col :span="8">
-                <vue-highcharts :options="options" ref="spline1"></vue-highcharts>
+                <vue-highcharts :highcharts="Highcharts" :options="options" ref="spline1" ></vue-highcharts>
             </el-col>
             <el-col :span="8">
                 <vue-highcharts :options="options" ref="spline2"></vue-highcharts>
@@ -59,6 +59,7 @@
         <passwd @getPasswd="getPasswd"></passwd>
         <set></set>
         <export></export>
+        <chart-detail></chart-detail>
     </div>
 </template>
 
@@ -71,12 +72,15 @@ import Export from '@/components/Export'
 import ChartDetail from '@/components/ChartDetail'
 import Highcharts from 'highcharts'
 
+
 export default {
     name: 'First',
     data () {
         return {
             options,
             swValue: true,
+            Highcharts,
+            ChartDetail
         }
     },
     components: {
@@ -109,7 +113,18 @@ export default {
         },
         openDetailChart () {
             this.$store.commit('updateDetailChartVisible', true)
-        }
+        },
+        
+    },
+    beforeMount () {
+        (function (H, vm) {
+            Highcharts.Chart.prototype.callbacks.push(function (chart) {
+                H.addEvent(chart.container, 'click', function (e) {
+                    // console.log(this)
+                    vm.openDetailChart()
+                })
+            })
+        })(Highcharts, this)
     },
     mounted () {
         this.$refs.spline1.addSeries(asyncData)
@@ -118,6 +133,7 @@ export default {
         this.$refs.spline4.addSeries(asyncData)
         this.$refs.spline5.addSeries(asyncData)
         this.$refs.spline6.addSeries(asyncData)
+
     }
 }
 

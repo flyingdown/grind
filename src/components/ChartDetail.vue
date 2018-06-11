@@ -1,7 +1,7 @@
 <template>
     <div>
-        <el-dialog title="提示" :visible="visibleOrNot"  fullscreen :before-close="handleClose">
-            <vue-highcharts :options="options" ref="spline4"></vue-highcharts>
+        <el-dialog :visible="visibleOrNot" fullscreen @open="handleOpen" :before-close="handleClose">
+            <vue-highcharts :options="options" ref="spline"></vue-highcharts>
         </el-dialog>
     </div>
 </template>
@@ -9,13 +9,20 @@
 <script>
 import VueHighcharts from 'vue2-highcharts'
 import { options, asyncData } from '@/config/chart-config'
+import Vue from 'vue'
 
 export default {
+    data () {
+        return {
+            options
+        }
+    },
     components: {
         VueHighcharts
     },
     mounted () {
-        this.$refs.spline1.addSeries(asyncData)
+        // console.log(this.$refs.spline)
+        // this.$refs.spline.addSeries(asyncData)
     },
     computed: {
         visibleOrNot () {
@@ -28,6 +35,12 @@ export default {
         }
     },
     methods: {
+        handleOpen() {
+            Vue.nextTick(_ => {
+                console.log(this.$refs.spline)
+                this.$refs.spline.addSeries(asyncData)
+            })
+        },
         handleClose(done) {
             this.$confirm('确认关闭？').then(_ => {
                 done()
