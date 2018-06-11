@@ -1,18 +1,13 @@
 <template>
   <div id="app">
     <router-view/>
-    <vue-highcharts></vue-highcharts>
   </div>
 </template>
 
 <script>
-import VueHighcharts from 'vue2-highcharts'
 
 export default {
     name: 'App',
-    components: {
-        VueHighcharts
-    }
 }
 </script>
 

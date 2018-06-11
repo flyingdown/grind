@@ -1,6 +1,11 @@
 export let options = {
     chart: {
-        type: 'spline'
+        type: 'spline',
+        // events: {
+        //     click: function (e) {
+        //         console.log("111111111111")
+        //     }
+        // }
     },
     title: {
         text: 'Monthly Average Temperature'
