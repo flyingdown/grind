@@ -1,8 +1,9 @@
 <template>
     <div>
+        <h1>河南和实研磨子试验台</h1>
         <el-row>
             <el-col :span="8">
-                <vue-highcharts :highcharts="Highcharts" :options="options" ref="spline1" ></vue-highcharts>
+                <vue-highcharts :highcharts="Highcharts" :options="myOptions" ref="spline1" ></vue-highcharts>
             </el-col>
             <el-col :span="8">
                 <vue-highcharts :options="options" ref="spline2"></vue-highcharts>
@@ -80,7 +81,26 @@ export default {
             options,
             swValue: true,
             Highcharts,
-            ChartDetail
+            ChartDetail,
+            chartsData: {
+                'a': asyncData,
+                'b': asyncData
+            }
+        }
+    },
+    computed: {
+        myOptions () {
+            let options = {}
+            Object.assign(options, this.options)
+            options.exporting = {
+                buttons: {
+                    contextButton: {
+                        enabled: false
+                    }
+                }
+            }
+            console.log(this.options)
+            return options
         }
     },
     components: {
@@ -114,7 +134,7 @@ export default {
         openDetailChart () {
             this.$store.commit('updateDetailChartVisible', true)
         },
-        
+
     },
     beforeMount () {
         (function (H, vm) {
