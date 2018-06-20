@@ -15,6 +15,15 @@ import {
     Switch,
     Dialog,
     Input,
+    InputNumber,
+    Checkbox,
+    CheckboxButton,
+    CheckboxGroup,
+    Table,
+    TableColumn,
+    DatePicker,
+    TimeSelect,
+    TimePicker,
     Message,
     MessageBox,
 } from 'element-ui'
@@ -28,8 +37,18 @@ Vue.use(Col)
 Vue.use(Switch)
 Vue.use(Dialog)
 Vue.use(Input)
+Vue.use(InputNumber)
+Vue.use(Checkbox)
+Vue.use(CheckboxButton)
+Vue.use(CheckboxGroup)
+Vue.use(Table);
+Vue.use(TableColumn);
+Vue.use(DatePicker);
+Vue.use(TimeSelect);
+Vue.use(TimePicker);
 
 Vue.config.productionTip = false
+Vue.config.devtools = true
 
 Vue.prototype.$confirm = MessageBox.confirm
 Vue.prototype.$prompt = MessageBox.prompt

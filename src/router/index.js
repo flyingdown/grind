@@ -5,11 +5,11 @@ import First from '@/components/First'
 Vue.use(Router)
 
 export default new Router({
-  routes: [
-    {
-      path: '/',
-      name: 'First',
-      component: First
-    }
-  ]
+    routes: [
+        {
+          path: '/',
+          name: 'First',
+          component: First
+        }
+    ]
 })

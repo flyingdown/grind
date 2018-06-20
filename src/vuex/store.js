@@ -10,6 +10,7 @@ const store = new Vuex.Store({
         passwdVisible: false,
         exportVisible: false,
         detailChartVisible: false,
+        detailChart: {}
     },
     mutations: {
         updateSetVisible (state, val) {
@@ -23,6 +24,9 @@ const store = new Vuex.Store({
         },
         updateDetailChartVisible (state, val) {
             state.detailChartVisible = val
+        },
+        updateDetailChart (state, val) {
+            state.detailChart = val
         },
     }
 })

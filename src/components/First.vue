@@ -1,59 +1,73 @@
 <template>
     <div>
         <h1>河南和实研磨子试验台</h1>
+        <!-- <el-row>
+            <el-col :span="1" :offset="3"><span class="pre-desc">速度:</span></el-col>
+            <el-col :span="2">
+                <el-input v-model="currSpeed" :disabled="true"></el-input>
+            </el-col>
+            <el-col :span="1" :offset="3"><span class="pre-desc">速度:</span></el-col>
+            <el-col :span="2">
+                <el-input v-model="currSpeed" :disabled="true"></el-input>
+            </el-col>
+            <el-col :span="1" :offset="3"><span class="pre-desc">速度:</span></el-col>
+            <el-col :span="2">
+                <el-input v-model="currSpeed" :disabled="true"></el-input>
+            </el-col>
+        </el-row> -->
         <el-row>
             <el-col :span="8">
                 <vue-highcharts :highcharts="Highcharts" :options="myOptions" ref="spline1" ></vue-highcharts>
             </el-col>
             <el-col :span="8">
-                <vue-highcharts :options="options" ref="spline2"></vue-highcharts>
+                <vue-highcharts :highcharts="Highcharts" :options="myOptions" ref="spline2"></vue-highcharts>
             </el-col>
             <el-col :span="8">
-                <vue-highcharts :options="options" ref="spline3"></vue-highcharts>
+                <vue-highcharts :highcharts="Highcharts" :options="myOptions" ref="spline3"></vue-highcharts>
             </el-col>
         </el-row>
         <el-row>
             <el-col :span="8">
-                <vue-highcharts :options="options" ref="spline4"></vue-highcharts>
+                <vue-highcharts :highcharts="Highcharts" :options="myOptions" ref="spline4"></vue-highcharts>
             </el-col>
             <el-col :span="8">
-                <vue-highcharts :options="options" ref="spline5"></vue-highcharts>
+                <vue-highcharts :highcharts="Highcharts" :options="myOptions" ref="spline5"></vue-highcharts>
             </el-col>
             <el-col :span="8">
-                <vue-highcharts :options="options" ref="spline6"></vue-highcharts>
+                <vue-highcharts :highcharts="Highcharts" :options="myOptions" ref="spline6"></vue-highcharts>
             </el-col>
         </el-row>
-        <el-row class="swRow">
-            <el-col :span="4">
-                <el-switch v-model="swValue" active-text="A开" inactive-text="A关"></el-switch>
+        <el-row>
+            <el-col class="swCol" :span="4">
+                <el-checkbox-button v-model="checked">1111111111111</el-checkbox-button>
             </el-col>
-            <el-col :span="4">
-                <el-switch v-model="swValue" active-text="B开" inactive-text="B关"></el-switch>
+            <el-col class="swCol" :span="4">
+                <el-checkbox-button v-model="checked">1111111111111</el-checkbox-button>
             </el-col>
-            <el-col :span="4">
-                <el-switch v-model="swValue" active-text="C开" inactive-text="C关"></el-switch>
+            <el-col class="swCol" :span="4">
+                <el-checkbox-button v-model="checked">1111111111111</el-checkbox-button>
             </el-col>
-            <el-col :span="4">
-                <el-switch v-model="swValue" active-text="D开" inactive-text="D关"></el-switch>
+            <el-col class="swCol" :span="4">
+                <el-checkbox-button v-model="checked">1111111111111</el-checkbox-button>
             </el-col>
-            <el-col :span="4">
+            <el-col class="swCol" :span="4">
                <el-button type="primary" @click="openExport">导出</el-button>
             </el-col>
         </el-row>
-        <el-row>
-            <el-col :span="4">
-                <el-switch v-model="swValue" active-text="E开" inactive-text="E关"></el-switch>
+        <el-row class="swRow">
+            <el-col class="swCol" :span="4">
+                <el-checkbox-button v-model="checked">1111111111111</el-checkbox-button>
             </el-col>
-            <el-col :span="4">
-                <el-switch v-model="swValue" active-text="F开" inactive-text="F关"></el-switch>
+            <el-col class="swCol" :span="4">
+                <el-checkbox-button v-model="checked">1111111111111</el-checkbox-button>
             </el-col>
-            <el-col :span="4">
-                <el-switch v-model="swValue" active-text="G开" inactive-text="G关"></el-switch>
+            <el-col class="swCol" :span="4">
+                <el-checkbox-button v-model="checked">1111111111111</el-checkbox-button>
             </el-col>
-            <el-col :span="4">
-                <el-switch v-model="swValue" active-text="H开" inactive-text="H关"></el-switch>
+            <el-col class="swCol" :span="4">
+                <el-checkbox-button v-model="checked">1111111111111</el-checkbox-button>
             </el-col>
-            <el-col :span="4">
+            <el-col class="swCol" :span="4">
                 <el-button type="primary" @click="openPasswd" >设置</el-button>
             </el-col>
         </el-row>
@@ -66,29 +80,33 @@
 
 <script>
 import VueHighcharts from 'vue2-highcharts'
-import { options, asyncData } from '@/config/chart-config'
+import { options, simulationConfig, loadData, addLastPoint } from '@/config/chart-config'
 import Passwd from '@/components/Passwd'
 import Set from '@/components/Set'
 import Export from '@/components/Export'
 import ChartDetail from '@/components/ChartDetail'
 import Highcharts from 'highcharts'
-
+import {getSimulation} from '@/api/dataset'
 
 export default {
     name: 'First',
     data () {
         return {
+            checked: true,
+            simulation: simulationConfig,
             options,
-            swValue: true,
-            Highcharts,
-            ChartDetail,
-            chartsData: {
-                'a': asyncData,
-                'b': asyncData
-            }
+            Highcharts
+        }
+    },
+    watch: {
+        checked (val, oldVal) {
+            console.log(val + ':' + oldVal)
         }
     },
     computed: {
+        // currSpeed () {
+        //     return this.simulate[0] + 'km/h'
+        // },
         myOptions () {
             let options = {}
             Object.assign(options, this.options)
@@ -99,7 +117,7 @@ export default {
                     }
                 }
             }
-            console.log(this.options)
+            // console.log(this.options)
             return options
         }
     },
@@ -134,32 +152,40 @@ export default {
         openDetailChart () {
             this.$store.commit('updateDetailChartVisible', true)
         },
-
+        load () {
+            let splines = {
+                spline1: this.$refs.spline1,
+                spline2: this.$refs.spline2,
+                spline3: this.$refs.spline3,
+                spline4: this.$refs.spline4,
+                spline5: this.$refs.spline5,
+                spline6: this.$refs.spline6
+            }
+            loadData(splines, this.simulation)
+        }
     },
     beforeMount () {
         (function (H, vm) {
             Highcharts.Chart.prototype.callbacks.push(function (chart) {
                 H.addEvent(chart.container, 'click', function (e) {
-                    // console.log(this)
+                    vm.$store.commit('updateDetailChart', chart)
                     vm.openDetailChart()
                 })
             })
         })(Highcharts, this)
     },
     mounted () {
-        this.$refs.spline1.addSeries(asyncData)
-        this.$refs.spline2.addSeries(asyncData)
-        this.$refs.spline3.addSeries(asyncData)
-        this.$refs.spline4.addSeries(asyncData)
-        this.$refs.spline5.addSeries(asyncData)
-        this.$refs.spline6.addSeries(asyncData)
-
+        this.load()
     }
 }
 
 </script>
 <style>
-.swRow {
+.swRow, .swCol {
     margin-bottom: 20px;
+}
+.pre-desc {
+    display: block;
+    line-height: 40px;
 }
 </style>
