@@ -175,7 +175,10 @@ export const splinesMapSimulation = {
 export const initSimulation = function (value, simulation) {
     // console.log(value)
     let val = value.data.results,
-        index = val[0].id
+        index = val.id || val[0].id
+    for (let i in simulation) {
+        simulation[i].data = []
+    }
     val.forEach(function (element) {
         for (let i in simulation) {
             simulation[i].data.unshift(
@@ -194,12 +197,14 @@ export const activeLastPointToolip = function (chart) {
     chart.tooltip.refresh(points[points.length -1])
 }
 
-export const loadSimulation = function(splines, simulationConfig) {
-    for (let i in splinesMapSimulation) {
+export const loadSimulation = function(splines, simulation) {
+    console.log(splines)
+    for (let i in splines) {
         // console.log(i)
         let chart = splines[i].getChart()
+        splines[i].removeSeries()
         splinesMapSimulation[i].content.forEach(function(element) {
-            splines[i].addSeries(simulationConfig[element])
+            splines[i].addSeries(simulation[element])
         })
         splines[i].hideLoading()
         chart.update({
@@ -207,7 +212,9 @@ export const loadSimulation = function(splines, simulationConfig) {
                 text: splinesMapSimulation[i].title
             }
         })
+        chart['info'] = i  // 设置每个曲线的名称信息
         chart.redraw()
+        // console.log(chart)
         activeLastPointToolip(chart)
     }
 }
@@ -222,7 +229,7 @@ export const addLastPoint = (splines, index) => {
     }).then((value) => {
         console.log(value)
         let val = value.data
-        for (let i in splinesMapSimulation) {
+        for (let i in splines) {
             let chart = splines[i].getChart()
             splinesMapSimulation[i].content.forEach((element, index) => {
                 let x = val.time_stamp,
@@ -239,11 +246,22 @@ export const addLastPoint = (splines, index) => {
             activeLastPointToolip(chart)
         }
 
-        return setTimeout(addLastPoint, interval, splines, index+1)
+        intervalHandle = setTimeout(addLastPoint, interval, splines, index+1)
     }).catch((err) => {
         console.log(err)
-        return setTimeout(addLastPoint, interval, splines, index)
+        intervalHandle = setTimeout(addLastPoint, interval, splines, index)
     })
+}
+
+export const toggleTimeout = () => {
+    if(intervalHandle) {
+        console.log(intervalHandle)
+        clearTimeout(intervalHandle)
+        intervalHandle = null
+        return false
+    }
+    intervalHandle = setTimeout(addLastPoint, interval, splines, index)
+    return true
 }
 
 export const loadData = (splines, simulation) => {
@@ -251,7 +269,7 @@ export const loadData = (splines, simulation) => {
         console.log(intervalHandle)
         clearTimeout(intervalHandle)
     }
-    for (let i in splinesMapSimulation) {
+    for (let i in splines) {
         splines[i].delegateMethod('showLoading', 'Loading...')
     }
     getSimulation({
@@ -262,6 +280,23 @@ export const loadData = (splines, simulation) => {
         console.log(index)
         loadSimulation(splines, simulation)
         intervalHandle = setTimeout(addLastPoint, interval, splines, index+1)
+    }).catch((err) => {
+        console.log(err)
+    })
+}
+
+export const loadDetailChart = (splines, simulation, min_date, max_date) => {
+    for (let i in splines) {
+        splines[i].delegateMethod('showLoading', 'Loading...')
+    }
+    getSimulation({
+        'min_date': min_date,
+        'max_date': max_date,
+        'page_size': 1000,
+        'ordering': '-id'
+    }).then((value) => {
+        initSimulation(value, simulation)
+        loadSimulation(splines, simulation)
     }).catch((err) => {
         console.log(err)
     })

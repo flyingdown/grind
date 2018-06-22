@@ -1,27 +1,80 @@
 <template>
     <div>
-        <el-dialog title="设置" :visible="visibleOrNot" fullscreen :before-close="handleClose">
-            <el-row>
-                <el-col class="digital-col" :span="key!=='id' ? 4 : 0" v-for="(val, key, index) in digitalSet" :key="index">
-                    <el-input-number v-if="key!=='id'" v-model="val.value" controls-position="right" :disabled="val.disabled" :controls="val.controls" :ref="'digitalInput' + key" @blur="digitalBlur(key)" @dblclick.native="handleDigital(key, $event)"></el-input-number>
+        <el-dialog title="设置" :visible="visibleOrNot" fullscreen :before-close="handleClose" @open="handleOpen">
+            <el-row class="digital-row">
+                <el-col v-for="(val, key, index) in digitalConfig.digitalSet" :key="index" :span="val.colSpan">
+                    <el-input-number v-if="val.rowNo === 1" v-model="val.value" :disabled="val.disabled" :controls="val.controls" :ref="key" @blur="digitalBlur(key)" @dblclick.native="handleDigital(key, $event)"></el-input-number>
                 </el-col>
             </el-row>
-            <el-row>
-                <el-col class="switch-col" :span="key!=='id' ? 2 : 0" v-for="(val, key, index) in switchSet" :key="index">
-                    <el-checkbox-button v-if="key!=='id'" v-model="switchSet[key].value" :checked="val.value" @change="handleSwitch(key, val.value)">{{val.value}}</el-checkbox-button>
+            <el-row class="digital-row">
+                <el-col v-for="(val, key, index) in digitalConfig.digitalSet" :key="index" :span="val.colSpan">
+                    <el-input-number v-if="val.rowNo === 2" v-model="val.value" :disabled="val.disabled" :controls="val.controls" :ref="key" @blur="digitalBlur(key)" @dblclick.native="handleDigital(key, $event)"></el-input-number>
+                </el-col>
+            </el-row>
+            <el-row class="digital-row">
+                <el-col v-for="(val, key, index) in digitalConfig.digitalSet" :key="index" :span="val.colSpan">
+                    <el-input-number v-if="val.rowNo === 3" v-model="val.value" :disabled="val.disabled" :controls="val.controls" :ref="key" @blur="digitalBlur(key)" @dblclick.native="handleDigital(key, $event)"></el-input-number>
+                </el-col>
+            </el-row>
+            <el-row class="digital-row">
+                <el-col v-for="(val, key, index) in digitalConfig.digitalSet" :key="index" :span="val.colSpan">
+                    <el-input-number v-if="val.rowNo === 4" v-model="val.value" :disabled="val.disabled" :controls="val.controls" :ref="key" @blur="digitalBlur(key)" @dblclick.native="handleDigital(key, $event)"></el-input-number>
+                </el-col>
+            </el-row>
+            <el-row class="digital-row">
+                <el-col v-for="(val, key, index) in digitalConfig.digitalSet" :key="index" :span="val.colSpan">
+                    <el-input-number v-if="val.rowNo === 5" v-model="val.value" :disabled="val.disabled" :controls="val.controls" :ref="key" @blur="digitalBlur(key)" @dblclick.native="handleDigital(key, $event)"></el-input-number>
+                </el-col>
+            </el-row>
+            <el-row class="digital-row">
+                <el-col v-for="(val, key, index) in digitalConfig.digitalSet" :key="index" :span="val.colSpan">
+                    <el-input-number v-if="val.rowNo === 6" v-model="val.value" :disabled="val.disabled" :controls="val.controls" :ref="key" @blur="digitalBlur(key)" @dblclick.native="handleDigital(key, $event)"></el-input-number>
+                </el-col>
+            </el-row>
+
+            <el-row class="switch-row">
+                <el-col v-for="(val, key, index) in switchConfig.switchSet" :key="index" :span="val.colSpan">
+                    <el-checkbox-button v-if="val.rowNo === 1" v-model="val.value" :disabled="val.disabled" :checked="val.checked"  @change="handleSwitch(key, val.value)">{{key}}</el-checkbox-button>
+                </el-col>
+            </el-row>
+            <el-row class="switch-row">
+                <el-col v-for="(val, key, index) in switchConfig.switchSet" :key="index" :span="val.colSpan">
+                    <el-checkbox-button v-if="val.rowNo === 2" v-model="val.value" :disabled="val.disabled" :checked="val.checked"  @change="handleSwitch(key, val.value)">{{key}}</el-checkbox-button>
+                </el-col>
+            </el-row>
+            <el-row class="switch-row">
+                <el-col v-for="(val, key, index) in switchConfig.switchSet" :key="index" :span="val.colSpan">
+                    <el-checkbox-button v-if="val.rowNo === 3" v-model="val.value" :disabled="val.disabled" :checked="val.checked"  @change="handleSwitch(key, val.value)">{{key}}</el-checkbox-button>
+                </el-col>
+            </el-row>
+            <el-row class="switch-row">
+                <el-col v-for="(val, key, index) in switchConfig.switchSet" :key="index" :span="val.colSpan">
+                    <el-checkbox-button v-if="val.rowNo === 4" v-model="val.value" :disabled="val.disabled" :checked="val.checked"  @change="handleSwitch(key, val.value)">{{key}}</el-checkbox-button>
+                </el-col>
+            </el-row>
+            <el-row class="switch-row">
+                <el-col v-for="(val, key, index) in switchConfig.switchSet" :key="index" :span="val.colSpan">
+                    <el-checkbox-button v-if="val.rowNo === 5" v-model="val.value" :disabled="val.disabled" :checked="val.checked"  @change="handleSwitch(key, val.value)">{{key}}</el-checkbox-button>
+                </el-col>
+            </el-row>
+            <el-row class="switch-row">
+                <el-col v-for="(val, key, index) in switchConfig.switchSet" :key="index" :span="val.colSpan">
+                    <el-checkbox-button v-if="val.rowNo === 6" v-model="val.value" :disabled="val.disabled" :checked="val.value"  @change="handleSwitch(key, val.value)">{{key}}</el-checkbox-button>
                 </el-col>
             </el-row>
         </el-dialog>
     </div>
 </template>
 <script>
-import {getDigital, getSwitch, patchDigital, patchSwitch} from '@/api/dataset'
+import {patchDigital, patchSwitch} from '@/api/dataset'
+import {digitalConfig, loadDigital} from '@/config/digital-config'
+import {switchConfig, loadSwitch} from '@/config/switch-config'
 
 export default {
     data () {
         return {
-            digitalSet: {},
-            switchSet: {},
+            digitalConfig,
+            switchConfig
         }
     },
     computed: {
@@ -41,40 +94,22 @@ export default {
                 this.$store.commit('updateSetVisible', false)
             }).catch(_ => {})
         },
-        loadDigital () {
-            getDigital({'ordering': 'id'}).then((value) => {
-                let val = value.data.results[0]
-                for (let i in val) {
-                    this.$set(this.digitalSet, i, {
-                        label: i,
-                        value: val[i],
-                        controls: false,
-                        disabled: true
-                    })
-                }
-            }).catch((err) => {
-                console.log(err)
-            })
-        },
-        loadSwitch () {
-            getSwitch({'ordering': '-id'}).then((value) => {
-                let val = value.data.results[0]
-                for (let i in val) {
-                    this.$set(this.switchSet, i, {
-                        label: i,
-                        value: i === 'id' ? val[i] : val[i] > 0
-                    })
-                }
-            }).catch((err) => {
-                console.log(err)
-            })
+        handleOpen() {
+            this.loadData()
         },
         handleSwitch(key, val) {
             console.log(key + ':' + val)
+            if (switchConfig.switchSet[key].readOnly) {
+                console.log('只读开关量')
+                this.$set(switchConfig.switchSet[key], 'value', !val)
+                return
+            }
+            switchConfig.switchSet[key].label = (val ? '开' : '关')
+            console.log(switchConfig)
             let sw = {}
             sw[key] = val
             patchSwitch({
-                'id': this.switchSet.id.value,
+                'id': switchConfig.id,
                 'switch': sw
             }).then((value) => {
                 console.log(value)
@@ -83,22 +118,26 @@ export default {
             })
         },
         loadData () {
-            this.loadDigital()
-            this.loadSwitch()
+            loadDigital(digitalConfig)
+            loadSwitch(switchConfig)
         },
         handleDigital (key, event) {
-            this.$set(this.digitalSet[key], 'disabled', false)
-            this.$set(this.digitalSet[key], 'controls', true)
+            // console.log(key, event)
+            if (digitalConfig.digitalSet[key].readOnly) {
+                console.log('只读数字量')
+                return
+            }
+            this.$set(digitalConfig.digitalSet[key], 'disabled', false)
+            // console.log(digitalConfig)
         },
         digitalBlur (key) {
             this.$confirm('确认提交？').then(_ => {
-                this.$set(this.digitalSet[key], 'disabled', true)
-                this.$set(this.digitalSet[key], 'controls', false)
+                console.log(key + ':' + digitalConfig.digitalSet[key].value)
+                this.$set(digitalConfig.digitalSet[key], 'disabled', true)
                 let digital = {}
-                digital[key] = this.digitalSet[key].value
-                console.log(key + ':' + this.digitalSet[key].value)
+                digital[key] = digitalConfig.digitalSet[key].value
                 patchDigital({
-                    'id': this.digitalSet.id.value,
+                    'id': digitalConfig.id,
                     'digital': digital
                 }).then((value) => {
                     console.log(value)
@@ -114,7 +153,7 @@ export default {
 }
 </script>
 <style scoped>
-.digital-col, .switch-col {
+.digital-row, .switch-row {
     margin-bottom: 20px;
 }
 </style>

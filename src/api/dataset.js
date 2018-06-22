@@ -1,21 +1,32 @@
 import axios from 'axios'
 
-const host = 'http://127.0.0.1'
+// const host = 'http://127.0.0.1'
+const host = 'http://222.89.35.107:8154'
 
 export const getSimulation = params => {
     let url = `${host}/simulation/`
     if ('id' in params) {
         url += params.id + '/'
+    } else if ('export' in params) {
+        url = `${host}/` + params.export + '/'
     }
 
-    if ('ordering' in params) {
-        url += `?ordering=` + params.ordering
+    let query = ''
+    for (let i in params) {
+        if (i === 'id' || i === 'export') {
+            continue
+        }
+        query += '&' + i + '=' + params[i]
     }
 
-    if ('ordering' in params && 'page_size' in params) {
-        url += `&page_size=` + params.page_size
+    if (query) {
+        url += '?' + query
     }
-
+    console.log(url)
+    if ('export' in params) {
+        global.open(url, "_parent")
+        return
+    }
     return axios.get(url)
 }
 
@@ -25,8 +36,19 @@ export const getDigital = params => {
         url += params.id + '/'
     }
 
-    if ('ordering' in params) {
-        url += `?ordering=` + params.ordering
+    // if ('ordering' in params) {
+    //     url += `?ordering=` + params.ordering
+    // }
+    let query = ''
+    for (let i in params) {
+        if (i === 'id') {
+            continue
+        }
+        query += '&' + i + '=' + params[i]
+    }
+
+    if (query) {
+        url += '?' + query
     }
 
     return axios.get(url)
@@ -38,8 +60,19 @@ export const getSwitch = params => {
         url += params.id + '/'
     }
 
-    if ('ordering' in params) {
-        url += `?ordering=` + params.ordering
+    // if ('ordering' in params) {
+    //     url += `?ordering=` + params.ordering
+    // }
+    let query = ''
+    for (let i in params) {
+        if (i === 'id') {
+            continue
+        }
+        query += '&' + i + '=' + params[i]
+    }
+
+    if (query) {
+        url += '?' + query
     }
 
     return axios.get(url)

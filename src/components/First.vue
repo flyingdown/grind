@@ -17,28 +17,28 @@
         </el-row> -->
         <el-row>
             <el-col :span="8">
-                <vue-highcharts :highcharts="Highcharts" :options="myOptions" ref="spline1" ></vue-highcharts>
+                <vue-highcharts :highcharts="Highcharts" :options="myOptions" ref="spline1" classname="spline1"></vue-highcharts>
             </el-col>
             <el-col :span="8">
-                <vue-highcharts :highcharts="Highcharts" :options="myOptions" ref="spline2"></vue-highcharts>
+                <vue-highcharts :highcharts="Highcharts" :options="myOptions" ref="spline2" classname="spline2"></vue-highcharts>
             </el-col>
             <el-col :span="8">
-                <vue-highcharts :highcharts="Highcharts" :options="myOptions" ref="spline3"></vue-highcharts>
+                <vue-highcharts :highcharts="Highcharts" :options="myOptions" ref="spline3" classname="spline3"></vue-highcharts>
             </el-col>
         </el-row>
         <el-row>
             <el-col :span="8">
-                <vue-highcharts :highcharts="Highcharts" :options="myOptions" ref="spline4"></vue-highcharts>
+                <vue-highcharts :highcharts="Highcharts" :options="myOptions" ref="spline4" classname="spline4"></vue-highcharts>
             </el-col>
             <el-col :span="8">
-                <vue-highcharts :highcharts="Highcharts" :options="myOptions" ref="spline5"></vue-highcharts>
+                <vue-highcharts :highcharts="Highcharts" :options="myOptions" ref="spline5" classname="spline5"></vue-highcharts>
             </el-col>
             <el-col :span="8">
-                <vue-highcharts :highcharts="Highcharts" :options="myOptions" ref="spline6"></vue-highcharts>
+                <vue-highcharts :highcharts="Highcharts" :options="myOptions" ref="spline6" classname="spline6"></vue-highcharts>
             </el-col>
         </el-row>
         <el-row>
-            <el-col class="swCol" :span="4">
+            <!-- <el-col class="swCol" :span="4">
                 <el-checkbox-button v-model="checked">1111111111111</el-checkbox-button>
             </el-col>
             <el-col class="swCol" :span="4">
@@ -49,23 +49,20 @@
             </el-col>
             <el-col class="swCol" :span="4">
                 <el-checkbox-button v-model="checked">1111111111111</el-checkbox-button>
+            </el-col> -->
+            <el-col :span="4" v-for="(val, key, index) in switchConfig.switchSet" :key="index">
+                <el-checkbox-button v-if="val.indexRowNo === 1" v-model="val.value" :checked="val.value"  @change="handleSwitch(key, val.value)">{{key}}</el-checkbox-button>
             </el-col>
             <el-col class="swCol" :span="4">
                <el-button type="primary" @click="openExport">导出</el-button>
             </el-col>
+            <el-col class="swCol" :span="4">
+               <el-button type="primary" @click.native="toggle">关闭实时曲线</el-button>
+            </el-col>
         </el-row>
         <el-row class="swRow">
-            <el-col class="swCol" :span="4">
-                <el-checkbox-button v-model="checked">1111111111111</el-checkbox-button>
-            </el-col>
-            <el-col class="swCol" :span="4">
-                <el-checkbox-button v-model="checked">1111111111111</el-checkbox-button>
-            </el-col>
-            <el-col class="swCol" :span="4">
-                <el-checkbox-button v-model="checked">1111111111111</el-checkbox-button>
-            </el-col>
-            <el-col class="swCol" :span="4">
-                <el-checkbox-button v-model="checked">1111111111111</el-checkbox-button>
+            <el-col :span="4" v-for="(val, key, index) in switchConfig.switchSet" :key="index">
+                <el-checkbox-button v-if="val.indexRowNo === 2" v-model="val.value" :checked="val.value"  @change="handleSwitch(key, val.value)">{{key}}</el-checkbox-button>
             </el-col>
             <el-col class="swCol" :span="4">
                 <el-button type="primary" @click="openPasswd" >设置</el-button>
@@ -80,22 +77,23 @@
 
 <script>
 import VueHighcharts from 'vue2-highcharts'
-import { options, simulationConfig, loadData, addLastPoint } from '@/config/chart-config'
+import { options, simulationConfig, loadData, toggleTimeout } from '@/config/chart-config'
 import Passwd from '@/components/Passwd'
 import Set from '@/components/Set'
 import Export from '@/components/Export'
 import ChartDetail from '@/components/ChartDetail'
 import Highcharts from 'highcharts'
 import {getSimulation} from '@/api/dataset'
+import {switchConfig} from '@/config/switch-config'
 
 export default {
     name: 'First',
     data () {
         return {
             checked: true,
-            simulation: simulationConfig,
             options,
-            Highcharts
+            Highcharts,
+            switchConfig
         }
     },
     watch: {
@@ -119,6 +117,9 @@ export default {
             }
             // console.log(this.options)
             return options
+        },
+        mySimulation () {
+            return  Object.assign({}, simulationConfig)
         }
     },
     components: {
@@ -152,6 +153,9 @@ export default {
         openDetailChart () {
             this.$store.commit('updateDetailChartVisible', true)
         },
+        toggle () {
+            return toggleTimeout()
+        },
         load () {
             let splines = {
                 spline1: this.$refs.spline1,
@@ -161,7 +165,16 @@ export default {
                 spline5: this.$refs.spline5,
                 spline6: this.$refs.spline6
             }
-            loadData(splines, this.simulation)
+
+            loadData(splines, this.mySimulation)
+        },
+        handleSwitch(key, val) {
+            console.log(key + ':' + val)
+            if (switchConfig.switchSet[key].readOnly) {
+                console.log('只读开关量')
+                this.$set(switchConfig.switchSet[key], 'value', !val)
+                return
+            }
         }
     },
     beforeMount () {
@@ -175,6 +188,7 @@ export default {
         })(Highcharts, this)
     },
     mounted () {
+        console.log(simulationConfig)
         this.load()
     }
 }
