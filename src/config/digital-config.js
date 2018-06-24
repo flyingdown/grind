@@ -1,5 +1,7 @@
 import {getDigital} from '@/api/dataset'
 
+let intervalHandle = null
+
 export const digitalConfig = {
     id: '',
     insertDatetime: '',
@@ -251,14 +253,27 @@ export const digitalConfig = {
 export const loadDigital = digitalConfig => {
     getDigital({'ordering': '-id'}).then((value) => {
         let val = value.data.results[0]
-
+        console.log(val)
         digitalConfig.id = val.id
         for (let i in digitalConfig.digitalSet) {
-            digitalConfig.digitalSet[i].value = val[i]
+            if (digitalConfig.digitalSet[i].disabled) {
+                digitalConfig.digitalSet[i].value = val[i]
+            }
         }
+        intervalHandle = setTimeout(loadDigital, 1000, digitalConfig)
     }).catch((err) => {
         console.log(err)
     })
 }
 
 
+export const toggleTimeout = () => {
+    if(intervalHandle) {
+        console.log(intervalHandle)
+        clearTimeout(intervalHandle)
+        intervalHandle = null
+        return false
+    }
+    intervalHandle = setTimeout(loadDigital, 1000, digitalConfig)
+    return true
+}

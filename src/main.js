@@ -6,6 +6,7 @@ import Vuex from 'vuex'
 import router from './router'
 import Highcharts from 'highcharts'
 import Exporting from 'highcharts/modules/exporting'
+import OfflineExporting from 'highcharts/modules/offline-exporting'
 import store from '@/vuex/store'
 import {
     Button,
@@ -24,6 +25,8 @@ import {
     DatePicker,
     TimeSelect,
     TimePicker,
+    TabPane,
+    Tag,
     Message,
     MessageBox,
 } from 'element-ui'
@@ -42,10 +45,12 @@ Vue.use(Checkbox)
 Vue.use(CheckboxButton)
 Vue.use(CheckboxGroup)
 Vue.use(Table);
-Vue.use(TableColumn);
-Vue.use(DatePicker);
-Vue.use(TimeSelect);
-Vue.use(TimePicker);
+Vue.use(TableColumn)
+Vue.use(DatePicker)
+Vue.use(TimeSelect)
+Vue.use(TimePicker)
+Vue.use(TabPane)
+Vue.use(Tag)
 
 Vue.config.productionTip = false
 Vue.config.devtools = true
@@ -61,6 +66,7 @@ Highcharts.setOptions({
 })
 
 Exporting(Highcharts)
+OfflineExporting(Highcharts)
 
 /* eslint-disable no-new */
 new Vue({

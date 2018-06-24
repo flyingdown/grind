@@ -1,5 +1,6 @@
 import Highcharts from 'highcharts'
 import {getSimulation} from '@/api/dataset'
+import store from '@/vuex/store'
 
 let intervalHandle = null,
     interval = 1000 * 3
@@ -40,6 +41,16 @@ export const options = {
     },
     legend: {
         enabled: true
+    },
+    exporting: {
+        buttons: {
+            contextButton: {
+                menuItems: null,
+                onclick: function () {
+                    this.exportChart();
+                }
+            }
+        }
     },
     plotOptions: {
         series: {
@@ -87,61 +98,71 @@ export const simulationConfig = {
         name: '速度',
         data: [],
         color: colors.speed,
-        label: 's01'
+        label: 's01',
+        id: 'speed'
     },
     temperature1: {
         name: '温度1',
         data: [],
         color: colors.temperature1,
-        label: 's02'
+        label: 's02',
+        id: 'temperature1'
     },
     temperature2: {
         name: '温度2',
         data: [],
         color: colors.temperature2,
-        label: 's03'
+        label: 's03',
+        id: 'temperature2'
     },
     pressure:  {
         name: '压力',
         data: [],
         color: colors.pressure,
-        label: 's04'
+        label: 's04',
+        id: 'pressure'
     },
     strength1: {
         name: '力1',
         data: [],
         color: colors.strength1,
-        label: 's05'
+        label: 's05',
+        id: 'strength1'
     },
     strength2: {
         name: '力2',
         data: [],
         color: colors.strength2,
-        label: 's06'
+        label: 's06',
+        id: 'strength2'
     },
     strength3: {
         name: '力3',
         data: [],
         color: colors.strength3,
-        label: 's07'
+        label: 's07',
+        id: 'strength3'
     },
     strength4: {
         name: '力4',
         data: [],
         color: colors.strength4,
-        label: 's08'
+        label: 's08',
+        id: 'strength4'
     },
     noise: {
         name: '噪音',
         data: [],
         color: colors.noise,
-        label: 's09'
+        label: 's09',
+        id: 'noise'
     },
     cof: {
         name: '摩擦因数',
         data: [],
         color: colors.cof,
-        label: 's10'
+        label: 's10',
+        id: 'cof'
     }
 }
 
@@ -229,6 +250,13 @@ export const addLastPoint = (splines, index) => {
     }).then((value) => {
         console.log(value)
         let val = value.data
+
+        store.state.speed = val.s01
+        store.state.temperature = val.s02
+        store.state.pressure = val.s04
+
+        // console.log(speed + ':' + temperature + ':' + pressure)
+
         for (let i in splines) {
             let chart = splines[i].getChart()
             splinesMapSimulation[i].content.forEach((element, index) => {
@@ -236,7 +264,7 @@ export const addLastPoint = (splines, index) => {
                     y = val[simulationConfig[element].label],
                     flag = false
                 // console.log(chart.series[index].points.length + ':' + i + ":" + index + ':' + element)
-                if (chart.series[index].points.length >= 10) {
+                if (chart.series[index].points.length >= 100) {
                     flag = true
                 }
 
@@ -274,7 +302,7 @@ export const loadData = (splines, simulation) => {
     }
     getSimulation({
         'ordering': '-id',
-        'page_size': 10
+        'page_size': 100
     }).then((value) => {
         let index = initSimulation(value, simulation)
         console.log(index)

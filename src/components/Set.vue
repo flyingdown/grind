@@ -62,12 +62,32 @@
                     <el-checkbox-button v-if="val.rowNo === 6" v-model="val.value" :disabled="val.disabled" :checked="val.value"  @change="handleSwitch(key, val.value)">{{key}}</el-checkbox-button>
                 </el-col>
             </el-row>
+            <el-row class="switch-row">
+                <el-col v-for="(val, key, index) in switchConfig.switchSet" :key="index" :span="val.colSpan">
+                    <el-checkbox-button v-if="val.rowNo === 7" v-model="val.value" :disabled="val.disabled" :checked="val.value"  @change="handleSwitch(key, val.value)">{{key}}</el-checkbox-button>
+                </el-col>
+            </el-row>
+            <el-row class="switch-row">
+                <el-col v-for="(val, key, index) in switchConfig.switchSet" :key="index" :span="val.colSpan">
+                    <el-checkbox-button v-if="val.rowNo === 8" v-model="val.value" :disabled="val.disabled" :checked="val.value"  @change="handleSwitch(key, val.value)">{{key}}</el-checkbox-button>
+                </el-col>
+            </el-row>
+            <el-row class="switch-row">
+                <el-col v-for="(val, key, index) in switchConfig.switchSet" :key="index" :span="val.colSpan">
+                    <el-checkbox-button v-if="val.rowNo === 9" v-model="val.value" :disabled="val.disabled" :checked="val.value"  @change="handleSwitch(key, val.value)">{{key}}</el-checkbox-button>
+                </el-col>
+            </el-row>
+            <el-row class="switch-row">
+                <el-col v-for="(val, key, index) in switchConfig.switchSet" :key="index" :span="val.colSpan">
+                    <el-checkbox-button v-if="val.rowNo === 10" v-model="val.value" :disabled="val.disabled" :checked="val.value"  @change="handleSwitch(key, val.value)">{{key}}</el-checkbox-button>
+                </el-col>
+            </el-row>
         </el-dialog>
     </div>
 </template>
 <script>
 import {patchDigital, patchSwitch} from '@/api/dataset'
-import {digitalConfig, loadDigital} from '@/config/digital-config'
+import {digitalConfig, loadDigital, toggleTimeout} from '@/config/digital-config'
 import {switchConfig, loadSwitch} from '@/config/switch-config'
 
 export default {
@@ -91,10 +111,12 @@ export default {
         handleClose(done) {
             this.$confirm('确认关闭？').then(_ => {
                 done()
+                toggleTimeout()
                 this.$store.commit('updateSetVisible', false)
             }).catch(_ => {})
         },
         handleOpen() {
+            // toggleTimeout()
             this.loadData()
         },
         handleSwitch(key, val) {
@@ -113,6 +135,8 @@ export default {
                 'switch': sw
             }).then((value) => {
                 console.log(value)
+                // loadSwitch(switchConfig)
+                setTimeout(loadSwitch, 1000, switchConfig)
             }).catch((err) => {
                 console.log(err)
             })
@@ -148,7 +172,7 @@ export default {
         }
     },
     mounted () {
-        this.loadData()
+        // this.loadData()
     }
 }
 </script>
