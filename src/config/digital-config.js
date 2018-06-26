@@ -1,6 +1,7 @@
 import {getDigital} from '@/api/dataset'
 
-let intervalHandle = null
+let intervalHandle = null,
+    interval = 220
 
 export const digitalConfig = {
     id: '',
@@ -13,7 +14,8 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 1,
             colSpan: 4,
-            controls: false
+            controls: false,
+            indexRowNo: 1
         },
         d02: {
             value: '',
@@ -21,7 +23,8 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 1,
             colSpan: 4,
-            controls: false
+            controls: false,
+            indexRowNo: 1
         },
         d03: {
             value: '',
@@ -29,7 +32,8 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 1,
             colSpan: 4,
-            controls: false
+            controls: false,
+            indexRowNo: 1
         },
         d04: {
             value: '',
@@ -37,7 +41,8 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 1,
             colSpan: 4,
-            controls: false
+            controls: false,
+            indexRowNo: 1
         },
         d05: {
             value: '',
@@ -45,7 +50,8 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 1,
             colSpan: 4,
-            controls: false
+            controls: false,
+            indexRowNo: 1
         },
         d06: {
             value: '',
@@ -53,7 +59,8 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 2,
             colSpan: 4,
-            controls: false
+            controls: false,
+            indexRowNo: 1
         },
         d07: {
             value: '',
@@ -61,7 +68,8 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 2,
             colSpan: 4,
-            controls: false
+            controls: false,
+            indexRowNo: 2
         },
         d08: {
             value: '',
@@ -69,7 +77,8 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 2,
             colSpan: 4,
-            controls: false
+            controls: false,
+            indexRowNo: 2
         },
         d09: {
             value: '',
@@ -77,7 +86,8 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 2,
             colSpan: 4,
-            controls: false
+            controls: false,
+            indexRowNo: 2
         },
         d10: {
             value: '',
@@ -85,7 +95,8 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 2,
             colSpan: 4,
-            controls: false
+            controls: false,
+            indexRowNo: 2
         },
         d11: {
             value: '',
@@ -93,7 +104,8 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 3,
             colSpan: 4,
-            controls: false
+            controls: false,
+            indexRowNo: 2
         },
         d12: {
             value: '',
@@ -101,7 +113,8 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 3,
             colSpan: 4,
-            controls: false
+            controls: false,
+            indexRowNo: 2
         },
         d13: {
             value: '',
@@ -109,7 +122,8 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 3,
             colSpan: 4,
-            controls: false
+            controls: false,
+            indexRowNo: 2
         },
         d14: {
             value: '',
@@ -117,7 +131,8 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 3,
             colSpan: 4,
-            controls: false
+            controls: false,
+            indexRowNo: 2
         },
         d15: {
             value: '',
@@ -125,7 +140,8 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 3,
             colSpan: 4,
-            controls: false
+            controls: false,
+            indexRowNo: 2
         },
         d16: {
             value: '',
@@ -133,7 +149,8 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 4,
             colSpan: 4,
-            controls: true
+            controls: true,
+            indexRowNo: 2
         },
         d17: {
             value: '',
@@ -141,7 +158,8 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 4,
             colSpan: 4,
-            controls: true
+            controls: true,
+            indexRowNo: 2
         },
         d18: {
             value: '',
@@ -149,7 +167,8 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 4,
             colSpan: 4,
-            controls: true
+            controls: true,
+            indexRowNo: 2
         },
         d19: {
             value: '',
@@ -157,7 +176,8 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 4,
             colSpan: 4,
-            controls: true
+            controls: true,
+            indexRowNo: 2
         },
         d20: {
             value: '',
@@ -165,7 +185,8 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 4,
             colSpan: 4,
-            controls: true
+            controls: true,
+            indexRowNo: 2
         },
         d21: {
             value: '',
@@ -173,7 +194,8 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 5,
             colSpan: 4,
-            controls: true
+            controls: true,
+            indexRowNo: 2
         },
         d22: {
             value: '',
@@ -181,7 +203,8 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 5,
             colSpan: 4,
-            controls: true
+            controls: true,
+            indexRowNo: 2
         },
         d23: {
             value: '',
@@ -189,7 +212,8 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 5,
             colSpan: 4,
-            controls: true
+            controls: true,
+            indexRowNo: 2
         },
         d24: {
             value: '',
@@ -197,7 +221,8 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 5,
             colSpan: 4,
-            controls: true
+            controls: true,
+            indexRowNo: 2
         },
         d25: {
             value: '',
@@ -205,7 +230,8 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 5,
             colSpan: 4,
-            controls: true
+            controls: true,
+            indexRowNo: 2
         },
         d26: {
             value: '',
@@ -213,7 +239,8 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 6,
             colSpan: 4,
-            controls: true
+            controls: true,
+            indexRowNo: 2
         },
         d27: {
             value: '',
@@ -221,7 +248,8 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 6,
             colSpan: 4,
-            controls: true
+            controls: true,
+            indexRowNo: 2
         },
         d28: {
             value: '',
@@ -229,7 +257,8 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 6,
             colSpan: 4,
-            controls: true
+            controls: true,
+            indexRowNo: 2
         },
         d29: {
             value: '',
@@ -237,7 +266,8 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 6,
             colSpan: 4,
-            controls: true
+            controls: true,
+            indexRowNo: 2
         },
         d30: {
             value: '',
@@ -245,7 +275,8 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 6,
             colSpan: 4,
-            controls: true
+            controls: true,
+            indexRowNo: 2
         }
     }
 }
@@ -260,20 +291,29 @@ export const loadDigital = digitalConfig => {
                 digitalConfig.digitalSet[i].value = val[i]
             }
         }
-        intervalHandle = setTimeout(loadDigital, 1000, digitalConfig)
+        intervalHandle = setTimeout(loadDigital, interval, digitalConfig)
     }).catch((err) => {
         console.log(err)
     })
 }
 
 
-export const toggleTimeout = () => {
-    if(intervalHandle) {
+export const toggleDigitalTimeout = (op) => {
+    if (intervalHandle && op === 'off') {
         console.log(intervalHandle)
         clearTimeout(intervalHandle)
         intervalHandle = null
         return false
+    } else if (intervalHandle === null && op === 'on') {
+        intervalHandle = setTimeout(loadDigital, interval, digitalConfig)
+        return true
+    } else if (intervalHandle) {
+        console.log(intervalHandle)
+        clearTimeout(intervalHandle)
+        intervalHandle = null
+        return false
+    } else {
+        intervalHandle = setTimeout(loadDigital, interval, digitalConfig)
+        return true
     }
-    intervalHandle = setTimeout(loadDigital, 1000, digitalConfig)
-    return true
 }

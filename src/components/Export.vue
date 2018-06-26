@@ -1,18 +1,22 @@
 <template>
     <div>
-        <el-dialog title="导出" :visible="visibleOrNot"  fullscreen :before-close="handleClose">
-            <el-row>
-                <el-col :span="12" :offset="6">
-                    <el-date-picker ref="datetimePicker" v-model="pickedTime" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" @change="datetimePicked"></el-date-picker>
-                </el-col>
-                <el-col :span="3">
-                    <el-button icon="el-icon-download" type="primary" circle @click.native="exportSimulation"></el-button>
-                </el-col>
-            </el-row>
-            <el-table :data="simulations" stripe style="width: 100%">
-                <el-table-column v-for="(value, key, index) in simulations[0]" :prop="key" :label="key" :key="index" align="center"></el-table-column>
-            </el-table>
-        </el-dialog>
+        <h1>模拟量导出</h1>
+        <el-row>
+            <el-col :push="20" :span="4">
+                <el-button type="primary" plain @click.native="goFirst">返回</el-button>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="12" :offset="6">
+                <el-date-picker ref="datetimePicker" v-model="pickedTime" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" @change="datetimePicked"></el-date-picker>
+            </el-col>
+            <el-col :span="3">
+                <el-button icon="el-icon-download" type="primary" circle @click.native="exportSimulation"></el-button>
+            </el-col>
+        </el-row>
+        <el-table :data="simulations" stripe style="width: 100%">
+            <el-table-column v-for="(value, key, index) in simulations[0]" :prop="key" :label="key" :key="index" align="center"></el-table-column>
+        </el-table>
     </div>
 </template>
 <script>
@@ -25,17 +29,10 @@ export default {
             simulations: []
         }
     },
-    computed: {
-        visibleOrNot () {
-            return this.$store.state.exportVisible
-        }
-    },
-    watch: {
-        visibleOrNot (val, oldVal) {
-            console.log(val + ":" + oldVal)
-        }
-    },
     methods: {
+        goFirst () {
+            this.$router.push('/')
+        },
         datetimePicked (val) {
             let request = {
                 'ordering': '-id',
@@ -46,12 +43,6 @@ export default {
                 request['max_date'] = this.pickedTime[1]
             }
             this.loadSimulation(request)
-        },
-        handleClose(done) {
-            this.$confirm('确认关闭？').then(_ => {
-                done()
-                this.$store.commit('updateExportVisible', false)
-            }).catch(_ => {})
         },
         loadSimulation (request) {
 

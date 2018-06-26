@@ -2,19 +2,9 @@
     <div>
         <h1>河南和实研磨子试验台</h1>
         <el-row>
-            <el-col :span="1" :offset="3"><span class="pre-desc">速度:</span></el-col>
-            <el-col :span="2">
-                <el-input v-model="mySpeed" :disabled="true"></el-input>
-                <!-- <el-tag type="success" size="medium">{{mySpeed}}</el-tag> -->
-            </el-col>
-            <el-col :span="1" :offset="3"><span class="pre-desc">温度:</span></el-col>
-            <el-col :span="2">
-                <el-input v-model="myTemperature" :disabled="true"></el-input>
-            </el-col>
-            <el-col :span="1" :offset="3"><span class="pre-desc">压力:</span></el-col>
-            <el-col :span="2">
-                <el-input v-model="myPressure" :disabled="true"></el-input>
-            </el-col>
+            <el-col v-for="(val, key, index) in digitalConfig.digitalSet" :key="index" :span="val.colSpan">
+                    <el-input-number v-if="val.indexRowNo === 1" v-model="val.value" :disabled="val.disabled" :controls="val.controls" :ref="key" @blur="digitalBlur(key)" @dblclick.native="handleDigital(key, $event)"></el-input-number>
+                </el-col>
         </el-row>
         <el-row>
             <el-col :span="8">
@@ -40,66 +30,49 @@
         </el-row>
         <el-row>
             <el-col :span="4" v-for="(val, key, index) in switchConfig.switchSet" :key="index">
-                <el-checkbox-button v-if="val.indexRowNo === 1" v-model="val.value" :checked="val.value"  @change="handleSwitch(key, val.value)">{{key}}</el-checkbox-button>
+                <el-checkbox-button v-if="val.indexRowNo === 1" v-model="val.value" :checked="val.value"  @change="handleSwitch(key, val.value)">{{key}}{{val.label}}</el-checkbox-button>
             </el-col>
             <el-col class="swCol" :span="4">
                <el-button type="primary" @click="openExport">导出</el-button>
             </el-col>
             <el-col class="swCol" :span="4">
-               <el-button type="primary" @click.native="toggle">关闭实时曲线</el-button>
+               <el-button type="primary" @click.native="toggleChart">关闭实时曲线</el-button>
             </el-col>
         </el-row>
         <el-row class="swRow">
             <el-col :span="4" v-for="(val, key, index) in switchConfig.switchSet" :key="index">
-                <el-checkbox-button v-if="val.indexRowNo === 2" v-model="val.value" :checked="val.value"  @change="handleSwitch(key, val.value)">{{key}}</el-checkbox-button>
+                <el-checkbox-button v-if="val.indexRowNo === 2" v-model="val.value" :checked="val.value"  @change="handleSwitch(key, val.value)">{{key}}{{val.label}}</el-checkbox-button>
             </el-col>
             <el-col class="swCol" :span="4">
                 <el-button type="primary" @click="openPasswd" >设置</el-button>
             </el-col>
+            <el-col class="swCol" :span="4">
+               <el-button type="primary" @click.native="toggleDigital('off')">开/关实时数字</el-button>
+            </el-col>
         </el-row>
         <passwd @getPasswd="getPasswd"></passwd>
-        <set></set>
-        <export></export>
-        <chart-detail></chart-detail>
     </div>
 </template>
 
 <script>
 import VueHighcharts from 'vue2-highcharts'
-import { options, simulationConfig, loadData, toggleTimeout } from '@/config/chart-config'
-import Passwd from '@/components/Passwd'
-import Set from '@/components/Set'
-import Export from '@/components/Export'
-import ChartDetail from '@/components/ChartDetail'
+import { options, seriesConfig, loadData, turnOffChartTimeout } from '@/config/simulation-config'
 import Highcharts from 'highcharts'
-import {getSimulation} from '@/api/dataset'
+import {digitalConfig, loadDigital, toggleDigitalTimeout} from '@/config/digital-config'
 import {switchConfig, loadSwitch} from '@/config/switch-config'
+import Passwd from '@/components/Passwd'
 
 export default {
     name: 'First',
     data () {
         return {
-            checked: true,
             options,
             Highcharts,
+            digitalConfig,
             switchConfig
         }
     },
-    watch: {
-        checked (val, oldVal) {
-            console.log(val + ':' + oldVal)
-        }
-    },
     computed: {
-        mySpeed () {
-            return this.$store.state.speed
-        },
-        myTemperature () {
-            return this.$store.state.temperature
-        },
-        myPressure () {
-            return this.$store.state.pressure
-        },
         myOptions () {
             let options = {}
             Object.assign(options, this.options)
@@ -113,25 +86,27 @@ export default {
             // console.log(this.options)
             return options
         },
-        mySimulation () {
-            return  Object.assign({}, simulationConfig)
+        mySeries () {
+            return  Object.assign({}, seriesConfig)
         }
     },
     components: {
         VueHighcharts,
-        Set,
-        Passwd,
-        Export,
-        ChartDetail,
+        Passwd
     },
     methods: {
+        turnOffTimeout () {
+            this.toggleChart('off')
+            this.toggleDigital('off')
+        },
         getPasswd (val) {
             if (val.target === "cancel") {
                 return
             }
 
             if (val.value === '123456') {
-                this.openSet()
+                this.turnOffTimeout()
+                this.$router.push('/set')
             } else {
                 this.$message.error('密码错误')
             }
@@ -139,17 +114,15 @@ export default {
         openPasswd () {
             this.$store.commit('updatePasswdVisible', true)
         },
-        openSet () {
-            this.$store.commit('updateSetVisible', true)
-        },
         openExport () {
-            this.$store.commit('updateExportVisible', true)
+            this.turnOffTimeout()
+            this.$router.push('/export')
         },
-        openDetailChart () {
-            this.$store.commit('updateDetailChartVisible', true)
+        toggleChart (op) {
+            return turnOffChartTimeout()
         },
-        toggle () {
-            return toggleTimeout()
+        toggleDigital (op) {
+            return toggleDigitalTimeout(op)
         },
         load () {
             let splines = {
@@ -161,7 +134,8 @@ export default {
                 spline6: this.$refs.spline6
             }
 
-            loadData(splines, this.mySimulation)
+            loadData(splines, this.mySeries, 100)
+            loadDigital(digitalConfig)
             loadSwitch(switchConfig) // 更新首页的8个开关值
         },
         handleSwitch(key, val) {
@@ -177,14 +151,22 @@ export default {
         (function (H, vm) {
             Highcharts.Chart.prototype.callbacks.push(function (chart) {
                 H.addEvent(chart.container, 'click', function (e) {
-                    vm.$store.commit('updateDetailChart', chart)
-                    vm.openDetailChart()
+                    if (vm.$route.path === '/detail') {
+                        console.log('already detail')
+                        return
+                    }
+                    console.log(vm.$route.path)
+                    vm.$store.commit('updateDetailChart', chart.info)
+                    vm.turnOffTimeout()
+                    vm.$router.push('/detail')
                 })
             })
         })(Highcharts, this)
     },
+    beforeDestroy () {
+        this.turnOffTimeout()
+    },
     mounted () {
-        console.log(simulationConfig)
         this.load()
     }
 }
@@ -199,7 +181,7 @@ export default {
     line-height: 60px;
 }
 
-.el-input.is-disabled .el-input__inner {
+.el-input.is-disabled .el-input__inner, .el-input .el-input__inner {
     background-color: black;
     font-weight: bold;
     font-size: 25px;
@@ -208,10 +190,11 @@ export default {
     line-height: 60px;
 }
 
-[class^=el-icon-],.el-input-number.is-disabled .el-input-number__decrease, .el-input-number.is-disabled .el-input-number__increase  {
+.el-input-number__decrease, .el-input-number__increase  {
     height: 58px;
     line-height: 58px;
     background-color: black;
+    color: #15ff00;
 }
 
 .el-checkbox-button:last-child .el-checkbox-button__inner {
