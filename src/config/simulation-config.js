@@ -282,7 +282,7 @@ export const splinesMapSeries = {
 }
 
 export const initSeries = function (value, seriesConfig) {
-    // console.log(value)
+    console.log(value)
     let val = value.data.results,
         index = val[0].id
     for (let i in seriesConfig) {
@@ -362,28 +362,28 @@ export const addLastPoint = (splines, index) => {
 
 export const toggleChartTimeout = (op, splines, index) => {
     if(intervalHandle && op === 'off') {
-        console.log(intervalHandle)
-        clearTimeout(intervalHandle)
-        intervalHandle = null
-        return false
+        while(intervalHandle) {
+            console.log(intervalHandle)
+            clearTimeout(intervalHandle)
+            intervalHandle = null
+        }
     } else if (intervalHandle === null && op === 'on') {
         intervalHandle = setTimeout(addLastPoint, interval, splines, index)
-        return true
     } else if (intervalHandle) {
-        console.log(intervalHandle)
-        clearTimeout(intervalHandle)
-        intervalHandle = null
-        return false
+        while(intervalHandle) {
+            console.log(intervalHandle)
+            clearTimeout(intervalHandle)
+            intervalHandle = null
+        }
     } else {
         intervalHandle = setTimeout(addLastPoint, interval, splines, index)
-        return true
     }
 }
 
 export const turnOffChartTimeout = () => {
     console.log(intervalHandle)
     clearTimeout(intervalHandle)
-    intervalHandle = null
+    // intervalHandle = null
 }
 
 export const loadData = (splines, seriesConfig, pointNum) => {
@@ -404,16 +404,21 @@ export const loadData = (splines, seriesConfig, pointNum) => {
     })
 }
 
-export const loadDetailChart = (splines, seriesConfig, min_date, max_date) => {
+export const loadDetailChart = (splines, seriesConfig, min_date, max_date, id_interval) => {
     for (let i in splines) {
         splines[i].delegateMethod('showLoading', 'Loading...')
     }
     getSimulation({
         'min_date': min_date,
         'max_date': max_date,
+        'id_interval': id_interval,
         'page_size': 1000,
         'ordering': '-id'
     }).then((value) => {
+        if (!value.data.count) {
+            alert('请求数据为空')
+            return
+        }
         initSeries(value, seriesConfig)
         loadSeries(splines, seriesConfig)
     }).catch((err) => {

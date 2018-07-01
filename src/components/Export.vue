@@ -1,11 +1,13 @@
 <template>
     <div>
         <h1>模拟量导出</h1>
-        <el-row>
-            <el-col :push="20" :span="4">
-                <el-button type="primary" plain @click.native="goFirst">返回</el-button>
-            </el-col>
-        </el-row>
+        <div>
+            <el-row class="back">
+                <el-col :push="20" :span="4">
+                    <el-button type="primary" plain @click.native="goFirst">返回</el-button>
+                </el-col>
+            </el-row>
+        </div>
         <el-row>
             <el-col :span="12" :offset="6">
                 <el-date-picker ref="datetimePicker" v-model="pickedTime" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" @change="datetimePicked"></el-date-picker>
@@ -56,7 +58,7 @@ export default {
         },
         exportSimulation () {
             let request = {
-                'export': 'export/xls/file'
+                'export': 'export/xlsx/file'
             }
             if(this.pickedTime) {
                 request['min_date'] = this.pickedTime[0],

@@ -1,4 +1,8 @@
-import {getSwitch} from '@/api/dataset'
+import Vue from 'vue'
+import {getSwitch, patchSwitch} from '@/api/dataset'
+
+let intervalHandle = null,
+    interval = 220
 
 export const switchConfig = {
     id: '',
@@ -12,7 +16,7 @@ export const switchConfig = {
             rowNo: 1,
             colSpan: 4,
             label: '',
-            indexRowNo: 1
+            indexRowNo: 0
         },
         k02: {
             value: '',
@@ -21,7 +25,7 @@ export const switchConfig = {
             rowNo: 1,
             colSpan: 4,
             label: '',
-            indexRowNo: 1
+            indexRowNo: 0
         },
         k03: {
             value: '',
@@ -30,7 +34,7 @@ export const switchConfig = {
             rowNo: 1,
             colSpan: 4,
             label: '',
-            indexRowNo: 1
+            indexRowNo: 0
         },
         k04: {
             value: '',
@@ -39,7 +43,7 @@ export const switchConfig = {
             rowNo: 1,
             colSpan: 4,
             label: '',
-            indexRowNo: 1
+            indexRowNo: 0
         },
         k05: {
             value: '',
@@ -48,7 +52,7 @@ export const switchConfig = {
             rowNo: 1,
             colSpan: 4,
             label: '',
-            indexRowNo: 2
+            indexRowNo: 0
         },
         k06: {
             value: '',
@@ -57,7 +61,7 @@ export const switchConfig = {
             rowNo: 2,
             colSpan: 4,
             label: '',
-            indexRowNo: 2
+            indexRowNo: 0
         },
         k07: {
             value: '',
@@ -66,7 +70,7 @@ export const switchConfig = {
             rowNo: 2,
             colSpan: 4,
             label: '',
-            indexRowNo: 2
+            indexRowNo: 0
         },
         k08: {
             value: '',
@@ -75,7 +79,7 @@ export const switchConfig = {
             rowNo: 2,
             colSpan: 4,
             label: '',
-            indexRowNo: 2
+            indexRowNo: 0
         },
         k09: {
             value: '',
@@ -236,8 +240,8 @@ export const switchConfig = {
             disabled: false,
             rowNo: 6,
             colSpan: 4,
-            label: '',
-            indexRowNo: 0
+            label: '自动运行',
+            indexRowNo: 1
         },
         k27: {
             value: '',
@@ -245,8 +249,8 @@ export const switchConfig = {
             disabled: false,
             rowNo: 6,
             colSpan: 4,
-            label: '',
-            indexRowNo: 0
+            label: '手动运行',
+            indexRowNo: 1
         },
         k28: {
             value: '',
@@ -254,8 +258,8 @@ export const switchConfig = {
             disabled: false,
             rowNo: 6,
             colSpan: 4,
-            label: '',
-            indexRowNo: 0
+            label: '手动研磨',
+            indexRowNo: 1
         },
         k29: {
             value: '',
@@ -263,8 +267,8 @@ export const switchConfig = {
             disabled: false,
             rowNo: 6,
             colSpan: 4,
-            label: '',
-            indexRowNo: 0
+            label: '连续研磨',
+            indexRowNo: 1
         },
         k30: {
             value: '',
@@ -272,8 +276,8 @@ export const switchConfig = {
             disabled: false,
             rowNo: 6,
             colSpan: 4,
-            label: '',
-            indexRowNo: 0
+            label: '雨水状态试验',
+            indexRowNo: 2
         },
         k31: {
             value: '',
@@ -281,8 +285,8 @@ export const switchConfig = {
             disabled: false,
             rowNo: 7,
             colSpan: 4,
-            label: '',
-            indexRowNo: 0
+            label: '风沙状态试验',
+            indexRowNo: 2
         },
         k32: {
             value: '',
@@ -290,8 +294,8 @@ export const switchConfig = {
             disabled: false,
             rowNo: 7,
             colSpan: 4,
-            label: '',
-            indexRowNo: 0
+            label: '高温状态试验',
+            indexRowNo: 2
         },
         k33: {
             value: '',
@@ -299,8 +303,8 @@ export const switchConfig = {
             disabled: false,
             rowNo: 7,
             colSpan: 4,
-            label: '',
-            indexRowNo: 0
+            label: '低温试验状态',
+            indexRowNo: 2
         },
         k34: {
             value: '',
@@ -308,8 +312,8 @@ export const switchConfig = {
             disabled: false,
             rowNo: 7,
             colSpan: 4,
-            label: '',
-            indexRowNo: 0
+            label: '混合试验状态',
+            indexRowNo: 2
         },
         k35: {
             value: '',
@@ -317,7 +321,7 @@ export const switchConfig = {
             disabled: false,
             rowNo: 7,
             colSpan: 4,
-            label: '',
+            label: '备用',
             indexRowNo: 0
         },
         k36: {
@@ -459,15 +463,46 @@ export const switchConfig = {
 }
 
 export const loadSwitch = switchConfig => {
-    console.log(switchConfig)
+    // console.log(switchConfig)
     getSwitch({'ordering': '-id'}).then((value) => {
         let val = value.data.results[0]
+        console.log(val)
+
         switchConfig.id = val.id
 
         for (let i in switchConfig.switchSet) {
             switchConfig.switchSet[i].value = val[i] === 1
-            switchConfig.switchSet[i].label = val[i] === 1 ? '开' : '关'
         }
+        intervalHandle = setTimeout(loadSwitch, interval, switchConfig)
+    }).catch((err) => {
+        console.log(err)
+    })
+}
+
+export const turnOffSwitchTimeout = () => {
+    console.log(intervalHandle)
+    clearTimeout(intervalHandle)
+    // intervalHandle = null
+}
+
+
+export const handleSwitch = (key, val) => {
+    console.log(key + ':' + val)
+    if (switchConfig.switchSet[key].readOnly) {
+        console.log('只读开关量')
+        Vue.set(switchConfig.switchSet[key], 'value', !val)
+        return
+    }
+    console.log(switchConfig)
+    let sw = {}
+    sw[key] = val
+    patchSwitch({
+        'id': switchConfig.id,
+        'switch': sw
+    }).then((value) => {
+        console.log(value)
+        // loadSwitch(switchConfig)
+        // setTimeout(loadSwitch, 500, switchConfig)
     }).catch((err) => {
         console.log(err)
     })

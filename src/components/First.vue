@@ -1,10 +1,24 @@
 <template>
     <div>
-        <h1>河南和实研磨子试验台</h1>
-        <el-row>
-            <el-col v-for="(val, key, index) in digitalConfig.digitalSet" :key="index" :span="val.colSpan">
-                    <el-input-number v-if="val.indexRowNo === 1" v-model="val.value" :disabled="val.disabled" :controls="val.controls" :ref="key" @blur="digitalBlur(key)" @dblclick.native="handleDigital(key, $event)"></el-input-number>
+        <h1 id="title">和实科技高速列车研磨子综合试验台</h1>
+        <div class='back'>
+            <el-row>
+                <el-col :push="20" :span="4">
+                    <el-button type="primary" plain @click.native="close">关闭</el-button>
                 </el-col>
+            </el-row>
+        </div>
+        <el-row class="digitalRow">
+            <el-col v-for="(val, key, index) in digitalConfig.digitalSet" :key="index" :span="val.colSpan">
+                <span class="digitalDesc" v-if="val.indexRowNo === 1">{{val.title}}</span>
+                <el-input-number v-if="val.indexRowNo === 1" v-model="val.value" :disabled="val.disabled" :controls="val.controls" :ref="key" @blur="digitalBlur(key)" @dblclick.native="handleDigital(key, $event)" name="digital" class="digital"></el-input-number>
+            </el-col>
+        </el-row>
+        <el-row class="digitalRow">
+            <el-col v-for="(val, key, index) in digitalConfig.digitalSet" :key="index" :span="val.colSpan">
+                <span class="digitalDesc" v-if="val.indexRowNo === 2">{{val.title}}</span>
+                <el-input-number v-if="val.indexRowNo === 2" v-model="val.value" :disabled="val.disabled" :controls="val.controls" :ref="key" @blur="digitalBlur(key)" @dblclick.native="handleDigital(key, $event)" name="digital" class="digital"></el-input-number>
+            </el-col>
         </el-row>
         <el-row>
             <el-col :span="8">
@@ -30,25 +44,28 @@
         </el-row>
         <el-row>
             <el-col :span="4" v-for="(val, key, index) in switchConfig.switchSet" :key="index">
-                <el-checkbox-button v-if="val.indexRowNo === 1" v-model="val.value" :checked="val.value"  @change="handleSwitch(key, val.value)">{{key}}{{val.label}}</el-checkbox-button>
+                <el-checkbox-button v-if="val.indexRowNo === 1" v-model="val.value" :checked="val.value"  @change="handleSwitch(key, val.value)">{{val.label}}{{val.value?'开':'关'}}</el-checkbox-button>
             </el-col>
             <el-col class="swCol" :span="4">
-               <el-button type="primary" @click="openExport">导出</el-button>
+               <el-button type="primary" @click="openExport" class="myButton">数据导出</el-button>
             </el-col>
             <el-col class="swCol" :span="4">
-               <el-button type="primary" @click.native="toggleChart">关闭实时曲线</el-button>
+                <el-button type="primary" @click="openPasswd" class="myButton">系统设置</el-button>
             </el-col>
+            <!-- <el-col class="swCol" :span="4">
+               <el-button type="primary" @click.native="turnOffChartTimeout">关闭实时曲线</el-button>
+            </el-col> -->
         </el-row>
-        <el-row class="swRow">
+        <el-row>
             <el-col :span="4" v-for="(val, key, index) in switchConfig.switchSet" :key="index">
-                <el-checkbox-button v-if="val.indexRowNo === 2" v-model="val.value" :checked="val.value"  @change="handleSwitch(key, val.value)">{{key}}{{val.label}}</el-checkbox-button>
+                <el-checkbox-button v-if="val.indexRowNo === 2" v-model="val.value" :checked="val.value"  @change="handleSwitch(key, val.value)">{{val.label}}{{val.value?'开':'关'}}</el-checkbox-button>
             </el-col>
-            <el-col class="swCol" :span="4">
-                <el-button type="primary" @click="openPasswd" >设置</el-button>
+            <el-col :span="4">
+                <el-button type="primary" class="myButton" disabled>备用</el-button>
             </el-col>
-            <el-col class="swCol" :span="4">
-               <el-button type="primary" @click.native="toggleDigital('off')">开/关实时数字</el-button>
-            </el-col>
+            <!-- <el-col class="swCol" :span="4">
+               <el-button type="primary" @click.native="turnOffDigitalTimeout">关闭实时数字</el-button>
+            </el-col> -->
         </el-row>
         <passwd @getPasswd="getPasswd"></passwd>
     </div>
@@ -58,8 +75,8 @@
 import VueHighcharts from 'vue2-highcharts'
 import { options, seriesConfig, loadData, turnOffChartTimeout } from '@/config/simulation-config'
 import Highcharts from 'highcharts'
-import {digitalConfig, loadDigital, toggleDigitalTimeout} from '@/config/digital-config'
-import {switchConfig, loadSwitch} from '@/config/switch-config'
+import {digitalConfig, loadDigital, turnOffDigitalTimeout} from '@/config/digital-config'
+import {switchConfig, loadSwitch, turnOffSwitchTimeout, handleSwitch} from '@/config/switch-config'
 import Passwd from '@/components/Passwd'
 
 export default {
@@ -69,7 +86,10 @@ export default {
             options,
             Highcharts,
             digitalConfig,
-            switchConfig
+            switchConfig,
+            turnOffChartTimeout,
+            turnOffDigitalTimeout,
+            handleSwitch
         }
     },
     computed: {
@@ -95,9 +115,16 @@ export default {
         Passwd
     },
     methods: {
+        close () {
+            global.opener=null
+            global.open('','_self')
+            global.parent.close()
+            this.$message.info('关闭失效，请使用快捷键ctrl+w')
+        },
         turnOffTimeout () {
-            this.toggleChart('off')
-            this.toggleDigital('off')
+            turnOffChartTimeout()
+            turnOffDigitalTimeout()
+            turnOffSwitchTimeout()
         },
         getPasswd (val) {
             if (val.target === "cancel") {
@@ -118,12 +145,6 @@ export default {
             this.turnOffTimeout()
             this.$router.push('/export')
         },
-        toggleChart (op) {
-            return turnOffChartTimeout()
-        },
-        toggleDigital (op) {
-            return toggleDigitalTimeout(op)
-        },
         load () {
             let splines = {
                 spline1: this.$refs.spline1,
@@ -137,14 +158,6 @@ export default {
             loadData(splines, this.mySeries, 100)
             loadDigital(digitalConfig)
             loadSwitch(switchConfig) // 更新首页的8个开关值
-        },
-        handleSwitch(key, val) {
-            console.log(key + ':' + val)
-            if (switchConfig.switchSet[key].readOnly) {
-                console.log('只读开关量')
-                this.$set(switchConfig.switchSet[key], 'value', !val)
-                return
-            }
         }
     },
     beforeMount () {
@@ -173,7 +186,17 @@ export default {
 
 </script>
 <style>
-.swRow, .swCol {
+#title {
+    margin: 30px auto 30px auto;
+    width: 66%;
+    text-align:justify;
+    text-justify:distribute-all-lines;/*ie6-8*/
+    text-align-last:justify;/* ie9*/
+    -moz-text-align-last:justify;/*ff*/
+    -webkit-text-align-last:justify;/*chrome 20+*/
+}
+
+.swRow, .swCol, .digitalRow {
     margin-bottom: 20px;
 }
 .pre-desc {
@@ -181,16 +204,23 @@ export default {
     line-height: 60px;
 }
 
-.el-input.is-disabled .el-input__inner, .el-input .el-input__inner {
+/*.el-input.is-disabled .el-input__inner, .el-input .el-input__inner {*/
+.digital>.el-input [name="digital"] {
     background-color: black;
     font-weight: bold;
-    font-size: 25px;
+    font-size: 20px;
     color: #15ff00;
     height: 60px;
     line-height: 60px;
 }
 
-.el-input-number__decrease, .el-input-number__increase  {
+div.digital {
+    width: 50%;
+    display: inline-block;
+    /*float: right;*/
+}
+
+.digital>.el-input-number__decrease, .digital>.el-input-number__increase  {
     height: 58px;
     line-height: 58px;
     background-color: black;
@@ -203,6 +233,36 @@ export default {
     font-size: 20px;
     font-weight: bold;
     border-width: 2px;
+}
+
+.myButton>span {
+    border-radius: 4px;
+    width: 141px;
+    font-size: 20px;
+    font-weight: bold;
+    border-width: 2px;
+    display: inline-block;
+}
+
+.back {
+    position: absolute;
+    top: 0px;
+    right: 60px;
+}
+
+.digitalDesc {
+    background-color: black;
+    border: 1px solid black;
+    height: 58px;
+    line-height: 58px;
+    display: inline-block;
+    font-size: 18px;
+    font-weight: bold;
+    color: #15ff00;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 40%;
+    /*letter-spacing: 4px;*/
 }
 
 </style>

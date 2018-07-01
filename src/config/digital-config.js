@@ -15,7 +15,8 @@ export const digitalConfig = {
             rowNo: 1,
             colSpan: 4,
             controls: false,
-            indexRowNo: 1
+            indexRowNo: 1,
+            title: '运行里程'
         },
         d02: {
             value: '',
@@ -24,7 +25,8 @@ export const digitalConfig = {
             rowNo: 1,
             colSpan: 4,
             controls: false,
-            indexRowNo: 1
+            indexRowNo: 1,
+            title: '运行速度'
         },
         d03: {
             value: '',
@@ -33,7 +35,8 @@ export const digitalConfig = {
             rowNo: 1,
             colSpan: 4,
             controls: false,
-            indexRowNo: 1
+            indexRowNo: 1,
+            title: '运行时间'
         },
         d04: {
             value: '',
@@ -42,7 +45,8 @@ export const digitalConfig = {
             rowNo: 1,
             colSpan: 4,
             controls: false,
-            indexRowNo: 1
+            indexRowNo: 1,
+            title: '动作次数'
         },
         d05: {
             value: '',
@@ -51,7 +55,8 @@ export const digitalConfig = {
             rowNo: 1,
             colSpan: 4,
             controls: false,
-            indexRowNo: 1
+            indexRowNo: 1,
+            title: '贴合时间'
         },
         d06: {
             value: '',
@@ -60,7 +65,8 @@ export const digitalConfig = {
             rowNo: 2,
             colSpan: 4,
             controls: false,
-            indexRowNo: 1
+            indexRowNo: 1,
+            title: '间隔时间'
         },
         d07: {
             value: '',
@@ -69,7 +75,8 @@ export const digitalConfig = {
             rowNo: 2,
             colSpan: 4,
             controls: false,
-            indexRowNo: 2
+            indexRowNo: 2,
+            title: '工作压力'
         },
         d08: {
             value: '',
@@ -78,7 +85,8 @@ export const digitalConfig = {
             rowNo: 2,
             colSpan: 4,
             controls: false,
-            indexRowNo: 2
+            indexRowNo: 2,
+            title: '踏面温度'
         },
         d09: {
             value: '',
@@ -87,7 +95,8 @@ export const digitalConfig = {
             rowNo: 2,
             colSpan: 4,
             controls: false,
-            indexRowNo: 2
+            indexRowNo: 2,
+            title: '摩擦系数'
         },
         d10: {
             value: '',
@@ -96,7 +105,8 @@ export const digitalConfig = {
             rowNo: 2,
             colSpan: 4,
             controls: false,
-            indexRowNo: 2
+            indexRowNo: 2,
+            title: '当前转速'
         },
         d11: {
             value: '',
@@ -105,7 +115,8 @@ export const digitalConfig = {
             rowNo: 3,
             colSpan: 4,
             controls: false,
-            indexRowNo: 2
+            indexRowNo: 2,
+            title: '工作频率'
         },
         d12: {
             value: '',
@@ -114,7 +125,8 @@ export const digitalConfig = {
             rowNo: 3,
             colSpan: 4,
             controls: false,
-            indexRowNo: 2
+            indexRowNo: 2,
+            title: '工作电流'
         },
         d13: {
             value: '',
@@ -123,7 +135,8 @@ export const digitalConfig = {
             rowNo: 3,
             colSpan: 4,
             controls: false,
-            indexRowNo: 2
+            indexRowNo: 3,
+            title: '占位备用'
         },
         d14: {
             value: '',
@@ -132,7 +145,8 @@ export const digitalConfig = {
             rowNo: 3,
             colSpan: 4,
             controls: false,
-            indexRowNo: 2
+            indexRowNo: 3,
+            title: '占位备用'
         },
         d15: {
             value: '',
@@ -141,7 +155,8 @@ export const digitalConfig = {
             rowNo: 3,
             colSpan: 4,
             controls: false,
-            indexRowNo: 2
+            indexRowNo: 3,
+            title: '占位备用'
         },
         d16: {
             value: '',
@@ -149,8 +164,9 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 4,
             colSpan: 4,
-            controls: true,
-            indexRowNo: 2
+            controls: false,
+            indexRowNo: 3,
+            title: '占位备用'
         },
         d17: {
             value: '',
@@ -158,8 +174,9 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 4,
             colSpan: 4,
-            controls: true,
-            indexRowNo: 2
+            controls: false,
+            indexRowNo: 3,
+            title: '占位备用'
         },
         d18: {
             value: '',
@@ -167,8 +184,9 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 4,
             colSpan: 4,
-            controls: true,
-            indexRowNo: 2
+            controls: false,
+            indexRowNo: 3,
+            title: '占位备用'
         },
         d19: {
             value: '',
@@ -176,8 +194,9 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 4,
             colSpan: 4,
-            controls: true,
-            indexRowNo: 2
+            controls: false,
+            indexRowNo: 3,
+            title: '占位备用'
         },
         d20: {
             value: '',
@@ -185,8 +204,9 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 4,
             colSpan: 4,
-            controls: true,
-            indexRowNo: 2
+            controls: false,
+            indexRowNo: 3,
+            title: '占位备用'
         },
         d21: {
             value: '',
@@ -194,8 +214,9 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 5,
             colSpan: 4,
-            controls: true,
-            indexRowNo: 2
+            controls: false,
+            indexRowNo: 3,
+            title: '占位备用'
         },
         d22: {
             value: '',
@@ -203,8 +224,9 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 5,
             colSpan: 4,
-            controls: true,
-            indexRowNo: 2
+            controls: false,
+            indexRowNo: 3,
+            title: '占位备用'
         },
         d23: {
             value: '',
@@ -212,8 +234,9 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 5,
             colSpan: 4,
-            controls: true,
-            indexRowNo: 2
+            controls: false,
+            indexRowNo: 3,
+            title: '占位备用'
         },
         d24: {
             value: '',
@@ -221,8 +244,9 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 5,
             colSpan: 4,
-            controls: true,
-            indexRowNo: 2
+            controls: false,
+            indexRowNo: 3,
+            title: '占位备用'
         },
         d25: {
             value: '',
@@ -230,8 +254,9 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 5,
             colSpan: 4,
-            controls: true,
-            indexRowNo: 2
+            controls: false,
+            indexRowNo: 3,
+            title: '占位备用'
         },
         d26: {
             value: '',
@@ -239,8 +264,9 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 6,
             colSpan: 4,
-            controls: true,
-            indexRowNo: 2
+            controls: false,
+            indexRowNo: 3,
+            title: '占位备用'
         },
         d27: {
             value: '',
@@ -248,8 +274,9 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 6,
             colSpan: 4,
-            controls: true,
-            indexRowNo: 2
+            controls: false,
+            indexRowNo: 3,
+            title: '占位备用'
         },
         d28: {
             value: '',
@@ -257,8 +284,9 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 6,
             colSpan: 4,
-            controls: true,
-            indexRowNo: 2
+            controls: false,
+            indexRowNo: 3,
+            title: '占位备用'
         },
         d29: {
             value: '',
@@ -266,8 +294,9 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 6,
             colSpan: 4,
-            controls: true,
-            indexRowNo: 2
+            controls: false,
+            indexRowNo: 3,
+            title: '占位备用'
         },
         d30: {
             value: '',
@@ -275,8 +304,9 @@ export const digitalConfig = {
             disabled: true,
             rowNo: 6,
             colSpan: 4,
-            controls: true,
-            indexRowNo: 2
+            controls: false,
+            indexRowNo: 3,
+            title: '占位备用'
         }
     }
 }
@@ -298,22 +328,8 @@ export const loadDigital = digitalConfig => {
 }
 
 
-export const toggleDigitalTimeout = (op) => {
-    if (intervalHandle && op === 'off') {
-        console.log(intervalHandle)
-        clearTimeout(intervalHandle)
-        intervalHandle = null
-        return false
-    } else if (intervalHandle === null && op === 'on') {
-        intervalHandle = setTimeout(loadDigital, interval, digitalConfig)
-        return true
-    } else if (intervalHandle) {
-        console.log(intervalHandle)
-        clearTimeout(intervalHandle)
-        intervalHandle = null
-        return false
-    } else {
-        intervalHandle = setTimeout(loadDigital, interval, digitalConfig)
-        return true
-    }
+export const turnOffDigitalTimeout = () => {
+    console.log(intervalHandle)
+    clearTimeout(intervalHandle)
+    // intervalHandle = null
 }

@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-// const host = 'http://127.0.0.1'
-const host = 'http://222.89.35.107:8154'
+const host = 'http://127.0.0.1:8154'
+// const host = 'http://222.89.35.107:8154'
 
 export const getSimulation = params => {
     let url = `${host}/simulation/`
